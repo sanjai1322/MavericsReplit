@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
+import { Route, Code, Trophy } from "lucide-react";
 
 const steps = [
   {
     number: 1,
     title: "Choose Your Path",
     description: "Select from AI-curated learning paths or jump into competitive challenges tailored to your skill level",
-    icon: "fas fa-route",
+    icon: Route,
     color: "var(--neon-green)",
     gradient: "from-[var(--neon-green)] to-emerald-400"
   },
@@ -13,7 +14,7 @@ const steps = [
     number: 2,
     title: "Code & Learn", 
     description: "Practice in our advanced IDE with real-time feedback and AI assistance that helps you grow faster",
-    icon: "fas fa-laptop-code",
+    icon: Code,
     color: "var(--neon-blue)",
     gradient: "from-[var(--neon-blue)] to-blue-400"
   },
@@ -21,7 +22,7 @@ const steps = [
     number: 3,
     title: "Compete & Earn",
     description: "Join hackathons, earn XP, unlock badges, and climb the leaderboard to showcase your skills",
-    icon: "fas fa-trophy",
+    icon: Trophy,
     color: "purple-500",
     gradient: "from-purple-500 to-pink-500"
   }
@@ -70,7 +71,7 @@ export default function HowItWorks() {
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
                   >
-                    <i className={`${step.icon} text-[var(--space-900)] text-2xl`}></i>
+                    <step.icon className="text-[var(--space-900)] w-8 h-8" />
                   </motion.div>
                   <div className={`w-8 h-8 mx-auto mb-4 bg-gradient-to-r ${step.gradient} rounded-full flex items-center justify-center text-[var(--space-900)] font-bold`}>
                     {step.number}
