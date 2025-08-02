@@ -1,0 +1,121 @@
+⚙️ Project Title: GenAI Coding Platform
+🎯 Goal: Create a futuristic, clean, and interactive GenAI-powered coding platform website for a hackathon, focusing on AI features and user engagement.
+
+🛠️ Tech Stack:
+
+Frontend: React.js + Tailwind CSS
+
+Backend: Node.js / Express or Drupal (based on your platform)
+
+GenAI Features: OpenAI GPT-4, DALL·E, Whisper API (if needed)
+
+Optional: Firebase for auth, MongoDB for data, or Supabase
+
+📄 Pages to Build:
+Home Page
+
+Hero section with tagline: “Master Code with AI”
+
+Subtext: “Your AI-Powered Journey to Becoming an Elite Developer Starts Now”
+
+CTA buttons: "Start Learning" and "Join Hackathon"
+
+Background: Futuristic gradient (dark purple & neon green/blue glow)
+
+AI illustration (use DALL·E or your own)
+
+How It Works (like the image you sent)
+
+Heading: “How It Works”
+
+Subtext: “Three simple steps to master coding and join the elite developers”
+
+Three cards with futuristic icons:
+
+Choose Your Path – “Select from AI-curated learning paths or jump into competitive challenges”
+
+Code & Learn – “Practice in our advanced IDE with real-time feedback and AI assistance”
+
+Compete & Earn – “Join hackathons, earn XP, unlock badges, and climb the leaderboard”
+
+Use animated hover effects and gradient borders
+
+Courses Page
+
+List of AI-curated coding courses
+
+Filter by: Frontend / Backend / Full Stack / Data Science / AI / Blockchain
+
+Cards with:
+
+Title, Level, Duration
+
+AI-generated thumbnail
+
+“Start Course” CTA
+
+IDE Playground Page
+
+Live coding editor (integrate with CodeMirror or Monaco)
+
+GPT-based code assistant panel on the right
+
+“Ask AI”, “Debug”, “Generate Function” buttons
+
+Leaderboard Page
+
+Show top 100 users by XP
+
+Rank, Name, XP, Badges
+
+Filters for Daily, Weekly, All-time
+
+Login/Signup Page
+
+Use Firebase Auth or custom backend
+
+Option for social logins (Google/GitHub)
+
+Admin/Instructor Panel (optional)
+
+Upload new courses, track user stats, push challenges
+
+🎨 UI/UX Guidelines:
+Font: Orbitron or Poppins (bold + futuristic look)
+
+Colors:
+
+Background: #0e0e2c
+
+Accent: Neon green #00FFAB, Electric blue #00C2FF, Purple-pink gradients
+
+Buttons: Glow effect on hover
+
+Animations: Use Framer Motion or Animate.css for fade/slide effects
+
+🤖 AI Integration Features:
+GPT-4 for course generation, real-time help, auto-assist coding
+
+DALL·E to generate course thumbnails & illustrations
+
+AI feedback after code submission
+
+XP and badge system via AI-generated criteria
+
+💡 Bonus Suggestions:
+Add a chatbot assistant using GPT-4 (bottom right corner)
+
+Include a “Daily AI Quiz” section (5 MCQs generated daily)
+
+Display an AI-generated motivation quote daily
+
+Use voice-to-text (Whisper API) for dictating code
+
+📦 Output Format:
+Fully responsive React components (with Tailwind CSS)
+
+Modular folder structure (pages/, components/, utils/, assets/)
+
+AI models integrated via APIs with .env for keys
+
+Include README.md explaining project setup
