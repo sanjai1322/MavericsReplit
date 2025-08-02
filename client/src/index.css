@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(240, 31%, 9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 31%, 15%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 31%, 9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 31%, 15%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 31%, 20%);
+  --input: hsl(240, 31%, 20%);
+  --primary: hsl(154, 100%, 50%);
+  --primary-foreground: hsl(240, 31%, 9%);
+  --secondary: hsl(240, 31%, 15%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 31%, 15%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(154, 100%, 50%);
+  --radius: 0.5rem;
+  
+  /* Custom colors for the futuristic theme */
+  --space-900: hsl(240, 31%, 9%);
+  --space-800: hsl(240, 31%, 15%);
+  --space-700: hsl(240, 31%, 20%);
+  --neon-green: hsl(154, 100%, 50%);
+  --neon-blue: hsl(194, 100%, 50%);
+  --electric-purple: hsl(271, 91%, 65%);
+  --electric-pink: hsl(329, 86%, 70%);
+}
+
+.dark {
+  --background: hsl(240, 31%, 9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 31%, 15%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 31%, 9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 31%, 15%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 31%, 20%);
+  --input: hsl(240, 31%, 20%);
+  --primary: hsl(154, 100%, 50%);
+  --primary-foreground: hsl(240, 31%, 9%);
+  --secondary: hsl(240, 31%, 15%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 31%, 20%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(154, 100%, 50%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--space-900);
+  }
+  
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+  
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .glass-morphism {
+    background: rgba(26, 26, 58, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .gradient-border {
+    background: linear-gradient(45deg, var(--neon-green), var(--neon-blue), var(--electric-purple));
+    padding: 2px;
+    border-radius: 12px;
+  }
+  
+  .gradient-border-content {
+    background: var(--space-800);
+    border-radius: 10px;
+  }
+  
+  .glow-button {
+    transition: all 0.3s ease;
+  }
+  
+  .glow-button:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 171, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  .card-glow {
+    transition: all 0.3s ease;
+  }
+  
+  .card-glow:hover {
+    box-shadow: 0 0 30px rgba(0, 194, 255, 0.3);
+    transform: translateY(-5px);
+  }
+  
+  .neon-text {
+    color: var(--neon-green);
+    text-shadow: 0 0 10px var(--neon-green);
+  }
+  
+  .neon-blue-text {
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--neon-blue);
+  }
+}
+
+@layer utilities {
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-pulse-neon {
+    animation: pulse-neon 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes glow {
+  from { 
+    box-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green), 0 0 15px var(--neon-green); 
+  }
+  to { 
+    box-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green), 0 0 30px var(--neon-green); 
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-neon {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Monaco Editor Styling */
+.monaco-editor {
+  background-color: var(--space-900) !important;
+}
+
+.monaco-editor .margin {
+  background-color: var(--space-800) !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--space-800);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--space-700);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-green);
+}
