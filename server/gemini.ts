@@ -1,6 +1,16 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+// Initialize with a fallback key or handle missing key gracefully
+const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY || "";
+let ai: GoogleGenAI | null = null;
+
+try {
+  if (apiKey) {
+    ai = new GoogleGenAI({ apiKey });
+  }
+} catch (error) {
+  console.warn("Failed to initialize Google GenAI:", error);
+}
 
 export interface AIMessage {
   role: 'user' | 'assistant' | 'system';
@@ -21,6 +31,13 @@ export interface CodeAssistanceResponse {
 }
 
 export async function getCodeAssistance(request: CodeAssistanceRequest): Promise<CodeAssistanceResponse> {
+  if (!ai) {
+    return {
+      suggestion: "AI assistance is currently unavailable. Please configure GEMINI_API_KEY to enable AI features.",
+      explanation: "The AI service requires an API key to function. Please contact your administrator to set up the necessary credentials."
+    };
+  }
+  
   try {
     let systemPrompt = "";
     let userPrompt = "";
@@ -83,6 +100,10 @@ export async function getCodeAssistance(request: CodeAssistanceRequest): Promise
 }
 
 export async function chatWithAI(messages: AIMessage[]): Promise<string> {
+  if (!ai) {
+    return "AI chat is currently unavailable. Please configure GEMINI_API_KEY to enable AI chat features.";
+  }
+  
   try {
     const systemInstruction = 'You are an AI coding assistant for GenAI Code platform. Help users with programming questions, provide code examples, debug issues, and offer learning guidance. Be encouraging and educational.';
     
@@ -104,6 +125,11 @@ export async function chatWithAI(messages: AIMessage[]): Promise<string> {
 }
 
 export async function generateCourseThumbnail(courseTitle: string, category: string): Promise<{ url: string }> {
+  if (!ai) {
+    // Fallback to a placeholder image if AI is not available
+    return { url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjMUEyMDMzIi8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjM2NkYxIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiPkNvdXJzZTwvdGV4dD4KPC9zdmc+" };
+  }
+  
   try {
     const prompt = `Create a modern, professional thumbnail for a coding course titled "${courseTitle}" in the ${category} category. Use a futuristic design with dark background, neon accents, and coding elements. Style should be clean and minimalist.`;
 
@@ -146,6 +172,13 @@ export async function generateCourseContent(title: string, level: string, catego
   description: string;
   duration: string;
 }> {
+  if (!ai) {
+    return {
+      description: "A comprehensive coding course designed to enhance your skills. AI generation is currently unavailable.",
+      duration: "8 weeks"
+    };
+  }
+  
   try {
     const systemInstruction = "You are a curriculum designer for a coding platform. Generate realistic course content. Respond with JSON in this format: { 'description': string, 'duration': string }";
     const prompt = `Create a course description and estimated duration for a ${level} level ${category} course titled "${title}". The description should be engaging and educational, around 150-200 characters. Duration should be realistic (e.g., "8 weeks", "12 weeks").`;
