@@ -1,6 +1,25 @@
 import { useRef, useEffect } from "react";
 import * as monaco from "monaco-editor";
 
+// Simple Monaco configuration for Vite
+declare global {
+  interface Window {
+    MonacoEnvironment: any;
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.MonacoEnvironment = {
+    getWorker: () => {
+      // Return a simple worker that doesn't use importScripts
+      return {
+        postMessage: () => {},
+        terminate: () => {}
+      } as any;
+    }
+  };
+}
+
 interface CodeEditorProps {
   value: string;
   onChange: (value: string) => void;

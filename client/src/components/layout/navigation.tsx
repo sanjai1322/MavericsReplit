@@ -32,15 +32,13 @@ export default function Navigation() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {isAuthenticated && navItems.map((item) => (
-              <Link key={item.path} href={item.path}>
-                <a className={`flex items-center space-x-2 transition-colors ${
-                  location === item.path 
-                    ? 'text-[var(--neon-green)]' 
-                    : 'text-gray-300 hover:text-[var(--neon-green)]'
-                }`}>
-                  <i className={item.icon}></i>
-                  <span>{item.label}</span>
-                </a>
+              <Link key={item.path} href={item.path} className={`flex items-center space-x-2 transition-colors ${
+                location === item.path 
+                  ? 'text-[var(--neon-green)]' 
+                  : 'text-gray-300 hover:text-[var(--neon-green)]'
+              }`}>
+                <i className={item.icon}></i>
+                <span>{item.label}</span>
               </Link>
             ))}
           </div>
