@@ -272,22 +272,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update API key endpoint
-  app.post('/api/ai/update-key', isAuthenticated, async (req, res) => {
-    try {
-      const { apiKey } = req.body;
-      if (!apiKey) {
-        return res.status(400).json({ message: "API key is required" });
-      }
-      
-      qwenService.updateApiKey(apiKey);
-      res.json({ message: "API key updated successfully", configured: true });
-    } catch (error) {
-      console.error("Error updating API key:", error);
-      res.status(500).json({ message: "Failed to update API key" });
-    }
-  });
-
   // Check AI service status
   app.get('/api/ai/status', isAuthenticated, async (req, res) => {
     try {
