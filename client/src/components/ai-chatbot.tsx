@@ -13,6 +13,12 @@ interface Message {
   timestamp: Date;
 }
 
+interface AIStatus {
+  configured: boolean;
+  service: string;
+  message: string;
+}
+
 export default function AIChatbot() {
   const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
@@ -24,7 +30,7 @@ export default function AIChatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Check AI service status
-  const { data: aiStatus } = useQuery({
+  const { data: aiStatus } = useQuery<AIStatus>({
     queryKey: ["/api/ai/status"],
     enabled: isAuthenticated && isOpen,
   });
