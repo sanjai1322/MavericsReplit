@@ -319,7 +319,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Store the conversation
       const updatedMessages = [
         ...aiMessages,
-        { role: 'assistant' as const, content: response }
+        { role: 'assistant' as const, content: response.content }
       ];
 
       try {
@@ -337,7 +337,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.warn("Failed to store chat:", chatError);
       }
 
-      res.json({ response, messages: updatedMessages });
+      res.json({ response: response.content, messages: updatedMessages });
     } catch (error) {
       console.error("Error in AI chat:", error);
       res.status(500).json({ message: "Failed to process AI chat" });
