@@ -46,6 +46,9 @@ export const courses = pgTable("courses", {
   duration: varchar("duration").notNull(),
   category: varchar("category").notNull(), // frontend, backend, fullstack, ai, blockchain
   thumbnailUrl: text("thumbnail_url"),
+  youtubeVideoId: text("youtube_video_id"),
+  youtubeChannelName: text("youtube_channel_name"),
+  youtubeVideoUrl: text("youtube_video_url"),
   enrolled: integer("enrolled").default(0),
   aiGenerated: boolean("ai_generated").default(false),
   createdAt: timestamp("created_at").defaultNow(),

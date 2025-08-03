@@ -1,11 +1,38 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { Rocket, Trophy, Users, Brain, Award, Bot, Code } from "lucide-react";
 import { Link } from "wouter";
+import { fadeInUp, floatingAnimation, neonPulse, parallaxScroll } from "@/lib/gsap-animations";
 
 export default function HeroSection() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const floatingElements = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (heroRef.current) {
+      fadeInUp(heroRef.current);
+    }
+    
+    if (floatingElements.current) {
+      parallaxScroll(floatingElements.current, 0.3);
+      const elements = floatingElements.current.querySelectorAll('.floating-element');
+      elements.forEach((element) => {
+        floatingAnimation(element as HTMLElement);
+      });
+    }
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
-      <div className="container mx-auto px-6 relative z-10">
+      {/* Floating Background Elements */}
+      <div ref={floatingElements} className="absolute inset-0 pointer-events-none">
+        <div className="floating-element absolute top-20 left-10 w-16 h-16 bg-[var(--neon-green)] opacity-20 rounded-full blur-xl"></div>
+        <div className="floating-element absolute bottom-40 right-20 w-24 h-24 bg-[var(--neon-blue)] opacity-20 rounded-full blur-xl"></div>
+        <div className="floating-element absolute top-1/3 right-1/4 w-8 h-8 bg-purple-500 opacity-30 rounded-full blur-lg"></div>
+        <div className="floating-element absolute bottom-1/3 left-1/4 w-12 h-12 bg-pink-500 opacity-25 rounded-full blur-lg"></div>
+      </div>
+      
+      <div ref={heroRef} className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-left">
             <motion.h1 

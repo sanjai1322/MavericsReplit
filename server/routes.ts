@@ -18,6 +18,122 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 
+// YouTube course seeding function
+async function seedYouTubeCourses(storage: any) {
+  const youTubeCourses = [
+    {
+      title: "Complete React Tutorial for Beginners",
+      description: "Learn React from scratch with this comprehensive tutorial. Perfect for beginners who want to build modern web applications.",
+      level: "beginner",
+      duration: "3h 45m",
+      category: "frontend",
+      youtubeVideoId: "DLX62G4lc44",
+      youtubeChannelName: "freeCodeCamp.org",
+      youtubeVideoUrl: "https://www.youtube.com/watch?v=DLX62G4lc44",
+      thumbnailUrl: "https://img.youtube.com/vi/DLX62G4lc44/maxresdefault.jpg",
+      enrolled: 15420,
+      aiGenerated: false
+    },
+    {
+      title: "Node.js & Express Backend Development",
+      description: "Master backend development with Node.js and Express. Build RESTful APIs and learn server-side programming.",
+      level: "intermediate",
+      duration: "4h 20m",
+      category: "backend",
+      youtubeVideoId: "fBNz5xF-Kx4",
+      youtubeChannelName: "Programming with Mosh",
+      youtubeVideoUrl: "https://www.youtube.com/watch?v=fBNz5xF-Kx4",
+      thumbnailUrl: "https://img.youtube.com/vi/fBNz5xF-Kx4/maxresdefault.jpg",
+      enrolled: 8750,
+      aiGenerated: false
+    },
+    {
+      title: "Full Stack MERN App Development",
+      description: "Build a complete full-stack application using MongoDB, Express, React, and Node.js. Deploy to production.",
+      level: "advanced",
+      duration: "6h 15m",
+      category: "fullstack",
+      youtubeVideoId: "ngc9gnuJeEY",
+      youtubeChannelName: "Traversy Media",
+      youtubeVideoUrl: "https://www.youtube.com/watch?v=ngc9gnuJeEY",
+      thumbnailUrl: "https://img.youtube.com/vi/ngc9gnuJeEY/maxresdefault.jpg",
+      enrolled: 12340,
+      aiGenerated: false
+    },
+    {
+      title: "Machine Learning with Python",
+      description: "Introduction to machine learning using Python. Learn algorithms, data preprocessing, and model evaluation.",
+      level: "intermediate",
+      duration: "5h 30m",
+      category: "ai",
+      youtubeVideoId: "7eh4d6sabA0",
+      youtubeChannelName: "Python Engineer",
+      youtubeVideoUrl: "https://www.youtube.com/watch?v=7eh4d6sabA0",
+      thumbnailUrl: "https://img.youtube.com/vi/7eh4d6sabA0/maxresdefault.jpg",
+      enrolled: 9680,
+      aiGenerated: false
+    },
+    {
+      title: "Blockchain Development Tutorial",
+      description: "Learn blockchain development from basics to advanced. Build your first cryptocurrency and smart contracts.",
+      level: "advanced",
+      duration: "4h 50m",
+      category: "blockchain",
+      youtubeVideoId: "M576WGiDBdQ",
+      youtubeChannelName: "Dapp University",
+      youtubeVideoUrl: "https://www.youtube.com/watch?v=M576WGiDBdQ",
+      thumbnailUrl: "https://img.youtube.com/vi/M576WGiDBdQ/maxresdefault.jpg",
+      enrolled: 6420,
+      aiGenerated: false
+    },
+    {
+      title: "Advanced JavaScript Concepts",
+      description: "Deep dive into advanced JavaScript concepts including closures, prototypes, async programming, and more.",
+      level: "advanced",
+      duration: "3h 25m",
+      category: "frontend",
+      youtubeVideoId: "Mus_vwhTCq0",
+      youtubeChannelName: "JavaScript Mastery",
+      youtubeVideoUrl: "https://www.youtube.com/watch?v=Mus_vwhTCq0",
+      thumbnailUrl: "https://img.youtube.com/vi/Mus_vwhTCq0/maxresdefault.jpg",
+      enrolled: 11250,
+      aiGenerated: false
+    },
+    {
+      title: "Python Django REST Framework",
+      description: "Build powerful REST APIs with Django REST Framework. Perfect for backend developers.",
+      level: "intermediate",
+      duration: "4h 10m",
+      category: "backend",
+      youtubeVideoId: "c708Nf0cHrs",
+      youtubeChannelName: "Very Academy",
+      youtubeVideoUrl: "https://www.youtube.com/watch?v=c708Nf0cHrs",
+      thumbnailUrl: "https://img.youtube.com/vi/c708Nf0cHrs/maxresdefault.jpg",
+      enrolled: 7890,
+      aiGenerated: false
+    },
+    {
+      title: "AI Chatbot Development",
+      description: "Create intelligent chatbots using natural language processing and machine learning techniques.",
+      level: "advanced",
+      duration: "3h 40m",
+      category: "ai",
+      youtubeVideoId: "RuVac3VdNYE",
+      youtubeChannelName: "Tech With Tim",
+      youtubeVideoUrl: "https://www.youtube.com/watch?v=RuVac3VdNYE",
+      thumbnailUrl: "https://img.youtube.com/vi/RuVac3VdNYE/maxresdefault.jpg",
+      enrolled: 5640,
+      aiGenerated: false
+    }
+  ];
+
+  // Create courses in parallel for better performance
+  const coursePromises = youTubeCourses.map(course => storage.createCourse(course));
+  await Promise.all(coursePromises);
+  
+  console.log(`Seeded ${youTubeCourses.length} YouTube courses`);
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
@@ -38,7 +154,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/courses', async (req, res) => {
     try {
       const category = req.query.category as string;
-      const courses = await storage.getCourses(category);
+      let courses = await storage.getCourses(category);
+      
+      // If no courses exist, seed with YouTube courses
+      if (courses.length === 0) {
+        await seedYouTubeCourses(storage);
+        courses = await storage.getCourses(category);
+      }
+      
       res.json(courses);
     } catch (error) {
       console.error("Error fetching courses:", error);

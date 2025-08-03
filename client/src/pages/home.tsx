@@ -1,16 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import Navigation from "@/components/layout/navigation";
 import Footer from "@/components/layout/footer";
 import AIChatbot from "@/components/ai-chatbot";
+import YouTubeCourseCard from "@/components/youtube-course-card";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
+import { BookOpen, Trophy, Users, Brain, TrendingUp, Play } from "lucide-react";
+import { fadeInUp, staggerFadeIn, initScrollAnimations, neonPulse } from "@/lib/gsap-animations";
+import type { Course } from "@shared/schema";
 
 export default function Home() {
   const { toast } = useToast();
   const { user, isAuthenticated, isLoading } = useAuth();
+  const coursesRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -37,6 +44,48 @@ export default function Home() {
     enabled: !!user,
   });
 
+  const { data: allCourses } = useQuery<Course[]>({
+    queryKey: ["/api/courses"],
+    enabled: !!user,
+  });
+
+  // Course enrollment mutation
+  const enrollMutation = useMutation({
+    mutationFn: async (courseId: string) => {
+      const response = await apiRequest("POST", `/api/courses/${courseId}/enroll`);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/user/courses"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/leaderboard"] });
+      toast({
+        title: "Success!",
+        description: "Successfully enrolled in course. You earned 50 XP!",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to enroll in course. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Initialize GSAP animations
+  useEffect(() => {
+    initScrollAnimations();
+    
+    if (coursesRef.current) {
+      const courseCards = coursesRef.current.querySelectorAll('.course-card');
+      staggerFadeIn(courseCards as NodeListOf<HTMLElement>, 0.1);
+    }
+    
+    if (statsRef.current) {
+      fadeInUp(statsRef.current);
+    }
+  }, [allCourses]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[var(--space-900)] flex items-center justify-center">
@@ -45,7 +94,8 @@ export default function Home() {
     );
   }
 
-  const userRank = leaderboard?.findIndex((u: any) => u.id === user?.id) + 1 || 0;
+  const userRank = Array.isArray(leaderboard) ? leaderboard.findIndex((u: any) => u.id === user?.id) + 1 : 0;
+  const enrolledCourseIds = Array.isArray(userCourses) ? userCourses.map((uc: any) => uc.courseId) : [];
 
   return (
     <div className="min-h-screen bg-[var(--space-900)]">
@@ -98,7 +148,7 @@ export default function Home() {
                 <p className="text-gray-300">Global Rank</p>
               </div>
               <div className="glass-morphism p-6 rounded-xl text-center">
-                <div className="text-3xl font-bold text-purple-400 mb-2">{userCourses?.length || 0}</div>
+                <div className="text-3xl font-bold text-purple-400 mb-2">{Array.isArray(userCourses) ? userCourses.length : 0}</div>
                 <p className="text-gray-300">Courses Enrolled</p>
               </div>
               <div className="glass-morphism p-6 rounded-xl text-center">
@@ -122,7 +172,7 @@ export default function Home() {
                   transition={{ duration: 0.3 }}
                 >
                   <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[var(--neon-green)] to-emerald-400 rounded-full flex items-center justify-center">
-                    <i className="fas fa-graduation-cap text-[var(--space-900)] text-2xl"></i>
+                    <BookOpen className="text-[var(--space-900)] w-8 h-8" />
                   </div>
                   <h3 className="font-orbitron text-xl font-bold mb-4 text-[var(--neon-green)]">Browse Courses</h3>
                   <p className="text-gray-300">Discover new AI-curated learning paths and expand your skills</p>
@@ -136,7 +186,7 @@ export default function Home() {
                   transition={{ duration: 0.3 }}
                 >
                   <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[var(--neon-blue)] to-blue-400 rounded-full flex items-center justify-center">
-                    <i className="fas fa-code text-[var(--space-900)] text-2xl"></i>
+                    <Brain className="text-[var(--space-900)] w-8 h-8" />
                   </div>
                   <h3 className="font-orbitron text-xl font-bold mb-4 text-[var(--neon-blue)]">Open IDE</h3>
                   <p className="text-gray-300">Start coding with our intelligent IDE and AI assistant</p>
@@ -150,7 +200,7 @@ export default function Home() {
                   transition={{ duration: 0.3 }}
                 >
                   <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                    <i className="fas fa-trophy text-white text-2xl"></i>
+                    <Trophy className="text-white w-8 h-8" />
                   </div>
                   <h3 className="font-orbitron text-xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                     View Leaderboard
@@ -167,7 +217,7 @@ export default function Home() {
           <div className="container mx-auto px-6">
             <h2 className="font-orbitron text-3xl font-bold text-center mb-12">Continue Learning</h2>
             
-            {userCourses && userCourses.length > 0 ? (
+            {Array.isArray(userCourses) && userCourses.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {userCourses.slice(0, 3).map((userCourse: any) => (
                   <div key={userCourse.id} className="glass-morphism rounded-xl overflow-hidden">
@@ -207,6 +257,49 @@ export default function Home() {
                     </button>
                   </Link>
                 </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Featured YouTube Courses */}
+        <section className="py-16 bg-[var(--space-800)]">
+          <div className="container mx-auto px-6">
+            <motion.div
+              className="text-center mb-12"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="font-orbitron text-3xl font-bold mb-4">
+                Featured YouTube Courses
+              </h2>
+              <p className="text-gray-300 max-w-2xl mx-auto">
+                Learn from the best programming channels on YouTube with curated courses
+              </p>
+            </motion.div>
+            
+            <div ref={coursesRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {Array.isArray(allCourses) && allCourses.slice(0, 6).map((course) => (
+                <div key={course.id} className="course-card">
+                  <YouTubeCourseCard
+                    course={course}
+                    isEnrolled={enrolledCourseIds.includes(course.id)}
+                    onEnroll={() => enrollMutation.mutate(course.id)}
+                    isEnrolling={enrollMutation.isPending}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {Array.isArray(allCourses) && allCourses.length > 6 && (
+              <div className="text-center mt-12">
+                <Link href="/courses">
+                  <button className="px-8 py-3 bg-gradient-to-r from-[var(--neon-blue)] to-blue-400 text-white font-semibold rounded-lg hover:shadow-lg transition-all">
+                    View All Courses
+                  </button>
+                </Link>
               </div>
             )}
           </div>

@@ -1,12 +1,22 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import Navigation from "@/components/layout/navigation";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/hero-section";
 import HowItWorks from "@/components/how-it-works";
 import AIChatbot from "@/components/ai-chatbot";
 import { Brain, Code, Trophy } from "lucide-react";
+import { initScrollAnimations, cleanupAnimations } from "@/lib/gsap-animations";
 
 export default function Landing() {
+  useEffect(() => {
+    initScrollAnimations();
+    
+    return () => {
+      cleanupAnimations();
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-[var(--space-900)]">
       <Navigation />
