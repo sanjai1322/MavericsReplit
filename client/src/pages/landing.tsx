@@ -4,6 +4,7 @@ import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/hero-section";
 import HowItWorks from "@/components/how-it-works";
 import AIChatbot from "@/components/ai-chatbot";
+import { Brain, Code, Trophy } from "lucide-react";
 
 export default function Landing() {
   return (
@@ -40,7 +41,7 @@ export default function Landing() {
                 transition={{ duration: 0.3 }}
               >
                 <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[var(--neon-green)] to-emerald-400 rounded-full flex items-center justify-center">
-                  <i className="fas fa-brain text-[var(--space-900)] text-2xl"></i>
+                  <Brain className="text-[var(--space-900)] w-8 h-8" />
                 </div>
                 <h3 className="font-orbitron text-xl font-bold mb-4 text-[var(--neon-green)]">AI-Powered Learning</h3>
                 <p className="text-gray-300">
@@ -54,7 +55,7 @@ export default function Landing() {
                 transition={{ duration: 0.3 }}
               >
                 <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[var(--neon-blue)] to-blue-400 rounded-full flex items-center justify-center">
-                  <i className="fas fa-code text-[var(--space-900)] text-2xl"></i>
+                  <Code className="text-[var(--space-900)] w-8 h-8" />
                 </div>
                 <h3 className="font-orbitron text-xl font-bold mb-4 text-[var(--neon-blue)]">Smart IDE</h3>
                 <p className="text-gray-300">
@@ -68,7 +69,7 @@ export default function Landing() {
                 transition={{ duration: 0.3 }}
               >
                 <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                  <i className="fas fa-trophy text-white text-2xl"></i>
+                  <Trophy className="text-white w-8 h-8" />
                 </div>
                 <h3 className="font-orbitron text-xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                   Gamified Progress

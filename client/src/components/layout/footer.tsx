@@ -1,3 +1,5 @@
+import { Code, Twitter, Github, MessageCircle, Linkedin, Bot } from "lucide-react";
+
 export default function Footer() {
   return (
     <footer className="bg-[var(--space-800)] border-t border-gray-700 py-16">
@@ -5,7 +7,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           <div>
             <div className="flex items-center space-x-2 mb-6">
-              <i className="fas fa-code text-[var(--neon-green)] text-2xl"></i>
+              <Code className="text-[var(--neon-green)] w-8 h-8" />
               <span className="font-orbitron text-xl font-bold">
                 GenAI<span className="text-[var(--neon-blue)]">Code</span>
               </span>
@@ -15,16 +17,16 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-[var(--neon-green)] transition-colors">
-                <i className="fab fa-twitter text-xl"></i>
+                <Twitter className="w-5 h-5" />
               </a>
               <a href="#" className="text-gray-400 hover:text-[var(--neon-green)] transition-colors">
-                <i className="fab fa-github text-xl"></i>
+                <Github className="w-5 h-5" />
               </a>
               <a href="#" className="text-gray-400 hover:text-[var(--neon-green)] transition-colors">
-                <i className="fab fa-discord text-xl"></i>
+                <MessageCircle className="w-5 h-5" />
               </a>
               <a href="#" className="text-gray-400 hover:text-[var(--neon-green)] transition-colors">
-                <i className="fab fa-linkedin text-xl"></i>
+                <Linkedin className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -70,7 +72,7 @@ export default function Footer() {
           <div className="flex items-center space-x-6 text-sm text-gray-400">
             <span>Built with ❤️ and AI</span>
             <span className="flex items-center">
-              <i className="fas fa-robot text-[var(--neon-green)] mr-1"></i>
+              <Bot className="text-[var(--neon-green)] mr-1 w-4 h-4" />
               Powered by GPT-4
             </span>
           </div>

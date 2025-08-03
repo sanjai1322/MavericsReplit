@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import { Rocket, Trophy, Users, Brain, Award, Bot, Code } from "lucide-react";
+import { Link } from "wouter";
 
 export default function HeroSection() {
   return (
@@ -32,24 +34,26 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.6 }}
             >
-              <motion.button 
-                className="px-8 py-4 bg-gradient-to-r from-[var(--neon-green)] to-emerald-400 text-[var(--space-900)] font-bold text-lg glow-button rounded-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => window.location.href = '/api/login'}
-              >
-                <i className="fas fa-rocket mr-2"></i>
-                Start Learning
-              </motion.button>
-              <motion.button 
-                className="px-8 py-4 border-2 border-[var(--neon-blue)] text-[var(--neon-blue)] hover:bg-[var(--neon-blue)] hover:text-[var(--space-900)] font-bold text-lg transition-all rounded-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => window.location.href = '/api/login'}
-              >
-                <i className="fas fa-trophy mr-2"></i>
-                Join Hackathon
-              </motion.button>
+              <Link href="/signup">
+                <motion.button 
+                  className="px-8 py-4 bg-gradient-to-r from-[var(--neon-green)] to-emerald-400 text-[var(--space-900)] font-bold text-lg glow-button rounded-lg flex items-center justify-center"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Rocket className="w-5 h-5 mr-2" />
+                  Start Learning
+                </motion.button>
+              </Link>
+              <Link href="/signin">
+                <motion.button 
+                  className="px-8 py-4 border-2 border-[var(--neon-blue)] text-[var(--neon-blue)] hover:bg-[var(--neon-blue)] hover:text-[var(--space-900)] font-bold text-lg transition-all rounded-lg flex items-center justify-center"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Trophy className="w-5 h-5 mr-2" />
+                  Sign In
+                </motion.button>
+              </Link>
             </motion.div>
             
             <motion.div 
@@ -59,15 +63,15 @@ export default function HeroSection() {
               transition={{ duration: 1, delay: 0.9 }}
             >
               <div className="flex items-center">
-                <i className="fas fa-users text-[var(--neon-green)] mr-2"></i>
+                <Users className="w-4 h-4 text-[var(--neon-green)] mr-2" />
                 <span>50K+ Developers</span>
               </div>
               <div className="flex items-center">
-                <i className="fas fa-brain text-[var(--neon-blue)] mr-2"></i>
+                <Brain className="w-4 h-4 text-[var(--neon-blue)] mr-2" />
                 <span>AI-Powered Learning</span>
               </div>
               <div className="flex items-center">
-                <i className="fas fa-award text-purple-400 mr-2"></i>
+                <Award className="w-4 h-4 text-purple-400 mr-2" />
                 <span>Industry Certified</span>
               </div>
             </motion.div>
@@ -93,7 +97,7 @@ export default function HeroSection() {
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
               >
-                <i className="fas fa-robot text-[var(--neon-green)] text-2xl"></i>
+                <Bot className="text-[var(--neon-green)] w-8 h-8" />
                 <p className="text-xs mt-1">AI Assistant</p>
               </motion.div>
               
@@ -102,7 +106,7 @@ export default function HeroSection() {
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
               >
-                <i className="fas fa-code text-[var(--neon-blue)] text-2xl"></i>
+                <Code className="text-[var(--neon-blue)] w-8 h-8" />
                 <p className="text-xs mt-1">Smart IDE</p>
               </motion.div>
             </div>

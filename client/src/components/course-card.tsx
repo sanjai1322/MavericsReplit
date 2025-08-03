@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Bot, Clock, Users, Server, Layers, Brain, Bitcoin, Code } from "lucide-react";
 
 interface CourseCardProps {
   course: {
@@ -24,17 +25,17 @@ const levelColors = {
 };
 
 const categoryIcons = {
-  frontend: "fab fa-react",
-  backend: "fas fa-server",
-  fullstack: "fas fa-layer-group",
-  ai: "fas fa-brain",
-  blockchain: "fab fa-bitcoin",
-  default: "fas fa-code"
+  frontend: Code,
+  backend: Server,
+  fullstack: Layers,
+  ai: Brain,
+  blockchain: Bitcoin,
+  default: Code
 };
 
 export default function CourseCard({ course, isEnrolled, onEnroll, isEnrolling }: CourseCardProps) {
   const levelColor = levelColors[course.level as keyof typeof levelColors] || "bg-gray-500";
-  const categoryIcon = categoryIcons[course.category as keyof typeof categoryIcons] || categoryIcons.default;
+  const CategoryIcon = categoryIcons[course.category as keyof typeof categoryIcons] || categoryIcons.default;
 
   return (
     <motion.div 
@@ -54,19 +55,19 @@ export default function CourseCard({ course, isEnrolled, onEnroll, isEnrolling }
               e.currentTarget.parentElement?.appendChild(
                 Object.assign(document.createElement('div'), {
                   className: 'w-full h-full flex items-center justify-center',
-                  innerHTML: `<i class="${categoryIcon} text-6xl text-[var(--neon-green)] opacity-50"></i>`
+                  innerHTML: `<div class="w-16 h-16 text-[var(--neon-green)] opacity-50 flex items-center justify-center"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/></svg></div>`
                 })
               );
             }}
           />
         ) : (
-          <i className={`${categoryIcon} text-6xl text-[var(--neon-green)] opacity-50`}></i>
+          <CategoryIcon className="w-16 h-16 text-[var(--neon-green)] opacity-50" />
         )}
         
         {/* AI Generated Badge */}
         {course.aiGenerated && (
           <div className="absolute top-3 right-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs px-2 py-1 rounded-full flex items-center">
-            <i className="fas fa-robot mr-1"></i>
+            <Bot className="w-3 h-3 mr-1" />
             AI Generated
           </div>
         )}
@@ -79,7 +80,7 @@ export default function CourseCard({ course, isEnrolled, onEnroll, isEnrolling }
             {course.level}
           </span>
           <span className="text-[var(--neon-green)] text-sm flex items-center">
-            <i className="fas fa-clock mr-1"></i>
+            <Clock className="w-4 h-4 mr-1" />
             {course.duration}
           </span>
         </div>
@@ -97,7 +98,7 @@ export default function CourseCard({ course, isEnrolled, onEnroll, isEnrolling }
         {/* Course Footer */}
         <div className="flex items-center justify-between">
           <div className="flex items-center text-sm text-gray-400">
-            <i className="fas fa-users mr-1"></i>
+            <Users className="w-4 h-4 mr-1" />
             <span>{course.enrolled.toLocaleString()} enrolled</span>
           </div>
           

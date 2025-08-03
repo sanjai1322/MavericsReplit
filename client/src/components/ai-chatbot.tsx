@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { X, Bot, Loader2, Send } from "lucide-react";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -21,7 +22,7 @@ export default function AIChatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Load existing chat history
-  const { data: chatHistory } = useQuery({
+  const { data: chatHistory } = useQuery<{ messages?: Message[] }>({
     queryKey: ["/api/ai/chat", sessionId],
     enabled: isAuthenticated && isOpen,
   });
@@ -29,7 +30,7 @@ export default function AIChatbot() {
   // Initialize messages from chat history
   useEffect(() => {
     if (chatHistory?.messages) {
-      const formattedMessages = chatHistory.messages.map((msg: any) => ({
+      const formattedMessages = chatHistory.messages.map((msg: Message) => ({
         ...msg,
         timestamp: new Date()
       }));
@@ -129,7 +130,7 @@ export default function AIChatbot() {
                 onClick={() => setIsOpen(false)}
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                <i className="fas fa-times"></i>
+                <X className="w-4 h-4" />
               </button>
             </div>
             
@@ -150,7 +151,7 @@ export default function AIChatbot() {
                   }`}>
                     {msg.role === 'assistant' && (
                       <div className="flex items-center mb-1">
-                        <i className="fas fa-robot text-[var(--neon-green)] mr-1 text-xs"></i>
+                        <Bot className="text-[var(--neon-green)] mr-1 w-3 h-3" />
                         <span className="text-xs text-[var(--neon-green)]">AI Assistant</span>
                       </div>
                     )}
@@ -193,7 +194,11 @@ export default function AIChatbot() {
                   disabled={!message.trim() || chatMutation.isPending}
                   className="px-3 py-2 bg-[var(--neon-green)] text-[var(--space-900)] rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <i className={`fas ${chatMutation.isPending ? 'fa-spinner fa-spin' : 'fa-paper-plane'}`}></i>
+                  {chatMutation.isPending ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
                 </button>
               </form>
             </div>
@@ -208,7 +213,11 @@ export default function AIChatbot() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
-        <i className={`fas ${isOpen ? 'fa-times' : 'fa-robot'} text-[var(--space-900)] text-xl`}></i>
+        {isOpen ? (
+          <X className="text-[var(--space-900)] w-6 h-6" />
+        ) : (
+          <Bot className="text-[var(--space-900)] w-6 h-6" />
+        )}
       </motion.button>
     </div>
   );

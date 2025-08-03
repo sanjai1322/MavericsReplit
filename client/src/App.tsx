@@ -7,6 +7,8 @@ import Home from "@/pages/home";
 import Courses from "@/pages/courses";
 import IDE from "@/pages/ide";
 import Leaderboard from "@/pages/leaderboard";
+import SignIn from "@/pages/signin";
+import SignUp from "@/pages/signup";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -14,6 +16,11 @@ function Router() {
 
   return (
     <Switch>
+      {/* Public routes accessible without authentication */}
+      <Route path="/signin" component={SignIn} />
+      <Route path="/signup" component={SignUp} />
+      
+      {/* Authentication-based routing */}
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />
       ) : (

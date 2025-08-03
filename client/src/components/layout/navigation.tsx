@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { motion } from "framer-motion";
+import { Home, GraduationCap, Code, Trophy, Menu, X } from "lucide-react";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -9,10 +10,10 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { path: "/", label: "Home", icon: "fas fa-home" },
-    { path: "/courses", label: "Courses", icon: "fas fa-graduation-cap" },
-    { path: "/ide", label: "IDE", icon: "fas fa-code" },
-    { path: "/leaderboard", label: "Leaderboard", icon: "fas fa-trophy" },
+    { path: "/", label: "Home", icon: Home },
+    { path: "/courses", label: "Courses", icon: GraduationCap },
+    { path: "/ide", label: "IDE", icon: Code },
+    { path: "/leaderboard", label: "Leaderboard", icon: Trophy },
   ];
 
   return (
@@ -22,7 +23,7 @@ export default function Navigation() {
           {/* Logo */}
           <Link href="/">
             <div className="flex items-center space-x-2 cursor-pointer">
-              <i className="fas fa-code text-[var(--neon-green)] text-2xl"></i>
+              <Code className="text-[var(--neon-green)] w-8 h-8" />
               <span className="font-orbitron text-xl font-bold">
                 GenAI<span className="text-[var(--neon-blue)]">Code</span>
               </span>
@@ -37,7 +38,7 @@ export default function Navigation() {
                   ? 'text-[var(--neon-green)]' 
                   : 'text-gray-300 hover:text-[var(--neon-green)]'
               }`}>
-                <i className={item.icon}></i>
+                <item.icon className="w-4 h-4" />
                 <span>{item.label}</span>
               </Link>
             ))}
@@ -70,18 +71,16 @@ export default function Navigation() {
               </>
             ) : (
               <>
-                <button 
-                  onClick={() => window.location.href = '/api/login'}
-                  className="hidden md:block px-4 py-2 text-sm border border-[var(--neon-green)] text-[var(--neon-green)] hover:bg-[var(--neon-green)] hover:text-[var(--space-900)] transition-all rounded"
-                >
-                  Sign In
-                </button>
-                <button 
-                  onClick={() => window.location.href = '/api/login'}
-                  className="px-4 py-2 text-sm bg-gradient-to-r from-[var(--neon-green)] to-[var(--neon-blue)] text-[var(--space-900)] font-semibold glow-button rounded"
-                >
-                  Join Hackathon
-                </button>
+                <Link href="/signin">
+                  <button className="hidden md:block px-4 py-2 text-sm border border-[var(--neon-green)] text-[var(--neon-green)] hover:bg-[var(--neon-green)] hover:text-[var(--space-900)] transition-all rounded">
+                    Sign In
+                  </button>
+                </Link>
+                <Link href="/signup">
+                  <button className="px-4 py-2 text-sm bg-gradient-to-r from-[var(--neon-green)] to-[var(--neon-blue)] text-[var(--space-900)] font-semibold glow-button rounded">
+                    Get Started
+                  </button>
+                </Link>
               </>
             )}
             
@@ -90,7 +89,7 @@ export default function Navigation() {
               className="md:hidden text-[var(--neon-green)]"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
@@ -106,17 +105,17 @@ export default function Navigation() {
             <div className="space-y-4">
               {isAuthenticated && navItems.map((item) => (
                 <Link key={item.path} href={item.path}>
-                  <a 
-                    className={`flex items-center space-x-2 py-2 transition-colors ${
+                  <div 
+                    className={`flex items-center space-x-2 py-2 transition-colors cursor-pointer ${
                       location === item.path 
                         ? 'text-[var(--neon-green)]' 
                         : 'text-gray-300 hover:text-[var(--neon-green)]'
                     }`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <i className={item.icon}></i>
+                    <item.icon className="w-4 h-4" />
                     <span>{item.label}</span>
-                  </a>
+                  </div>
                 </Link>
               ))}
               
@@ -142,18 +141,22 @@ export default function Navigation() {
                 </div>
               ) : (
                 <div className="pt-4 border-t border-gray-700 space-y-2">
-                  <button 
-                    onClick={() => window.location.href = '/api/login'}
-                    className="w-full px-4 py-2 text-sm border border-[var(--neon-green)] text-[var(--neon-green)] hover:bg-[var(--neon-green)] hover:text-[var(--space-900)] transition-all rounded"
-                  >
-                    Sign In
-                  </button>
-                  <button 
-                    onClick={() => window.location.href = '/api/login'}
-                    className="w-full px-4 py-2 text-sm bg-gradient-to-r from-[var(--neon-green)] to-[var(--neon-blue)] text-[var(--space-900)] font-semibold rounded"
-                  >
-                    Join Hackathon
-                  </button>
+                  <Link href="/signin">
+                    <button 
+                      className="w-full px-4 py-2 text-sm border border-[var(--neon-green)] text-[var(--neon-green)] hover:bg-[var(--neon-green)] hover:text-[var(--space-900)] transition-all rounded"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Sign In
+                    </button>
+                  </Link>
+                  <Link href="/signup">
+                    <button 
+                      className="w-full px-4 py-2 text-sm bg-gradient-to-r from-[var(--neon-green)] to-[var(--neon-blue)] text-[var(--space-900)] font-semibold rounded"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Get Started
+                    </button>
+                  </Link>
                 </div>
               )}
             </div>
