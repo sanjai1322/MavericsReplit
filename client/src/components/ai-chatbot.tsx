@@ -4,7 +4,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { X, Bot, Loader2, Send } from "lucide-react";
+import { X, Bot, Loader2, Send, Settings } from "lucide-react";
+import AISetupModal from "./ai-setup-modal";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -19,7 +20,14 @@ export default function AIChatbot() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substring(2)}`);
+  const [showSetup, setShowSetup] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Check AI service status
+  const { data: aiStatus } = useQuery({
+    queryKey: ["/api/ai/status"],
+    enabled: isAuthenticated && isOpen,
+  });
 
   // Load existing chat history
   const { data: chatHistory } = useQuery<{ messages?: Message[] }>({
@@ -35,15 +43,22 @@ export default function AIChatbot() {
         timestamp: new Date()
       }));
       setMessages(formattedMessages);
-    } else if (messages.length === 0) {
-      // Add welcome message if no history
+    } else if (messages.length === 0 && aiStatus?.configured) {
+      // Add welcome message if no history and AI is configured
       setMessages([{
         role: 'assistant',
-        content: '👋 Hi! I\'m your AI coding assistant. How can I help you today? I can help with debugging, code explanations, best practices, and more!',
+        content: '👋 Hi! I\'m your Qwen AI coding assistant. How can I help you today? I can help with debugging, code explanations, optimization, and more!',
+        timestamp: new Date()
+      }]);
+    } else if (messages.length === 0 && !aiStatus?.configured) {
+      // Add setup message if AI is not configured
+      setMessages([{
+        role: 'assistant',
+        content: '🤖 Hi! I\'m your AI coding assistant, but I need to be configured first. Click the settings button to provide your Qwen API key.',
         timestamp: new Date()
       }]);
     }
-  }, [chatHistory]);
+  }, [chatHistory, aiStatus]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -123,15 +138,24 @@ export default function AIChatbot() {
             {/* Header */}
             <div className="p-4 border-b border-gray-600 flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-[var(--neon-green)] rounded-full animate-pulse"></div>
-                <span className="font-orbitron font-bold">AI Assistant</span>
+                <div className={`w-3 h-3 rounded-full animate-pulse ${aiStatus?.configured ? 'bg-[var(--neon-green)]' : 'bg-yellow-500'}`}></div>
+                <span className="font-orbitron font-bold">Qwen AI Assistant</span>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
+              <div className="flex items-center space-x-2">
+                <button 
+                  onClick={() => setShowSetup(true)}
+                  className="p-1 hover:bg-gray-700 rounded"
+                  title="AI Settings"
+                >
+                  <Settings className="w-4 h-4" />
+                </button>
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
             
             {/* Messages */}
@@ -152,7 +176,7 @@ export default function AIChatbot() {
                     {msg.role === 'assistant' && (
                       <div className="flex items-center mb-1">
                         <Bot className="text-[var(--neon-green)] mr-1 w-3 h-3" />
-                        <span className="text-xs text-[var(--neon-green)]">AI Assistant</span>
+                        <span className="text-xs text-[var(--neon-green)]">Qwen AI</span>
                       </div>
                     )}
                     <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -185,13 +209,13 @@ export default function AIChatbot() {
                   type="text"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Ask me anything about coding..."
+                  placeholder={aiStatus?.configured ? "Ask me anything about coding..." : "Configure AI to start chatting..."}
                   className="flex-1 bg-[var(--space-700)] border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-[var(--neon-green)] focus:outline-none text-white"
-                  disabled={chatMutation.isPending}
+                  disabled={chatMutation.isPending || !aiStatus?.configured}
                 />
                 <button
                   type="submit"
-                  disabled={!message.trim() || chatMutation.isPending}
+                  disabled={!message.trim() || chatMutation.isPending || !aiStatus?.configured}
                   className="px-3 py-2 bg-[var(--neon-green)] text-[var(--space-900)] rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {chatMutation.isPending ? (
@@ -206,10 +230,17 @@ export default function AIChatbot() {
         )}
       </AnimatePresence>
 
+      {/* AI Setup Modal */}
+      <AISetupModal open={showSetup} onOpenChange={setShowSetup} />
+
       {/* Chatbot Toggle Button */}
       <motion.button
         onClick={toggleChatbot}
-        className="w-16 h-16 bg-gradient-to-r from-[var(--neon-green)] to-emerald-400 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center animate-pulse-neon"
+        className={`w-16 h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center animate-pulse-neon ${
+          aiStatus?.configured 
+            ? 'bg-gradient-to-r from-[var(--neon-green)] to-emerald-400' 
+            : 'bg-gradient-to-r from-yellow-500 to-orange-500'
+        }`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >

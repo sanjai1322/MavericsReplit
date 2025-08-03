@@ -7,9 +7,10 @@ import {
   chatWithAI, 
   generateCourseThumbnail, 
   generateCourseContent,
+  qwenService,
   type CodeAssistanceRequest,
   type AIMessage 
-} from "./openai";
+} from "./qwen";
 import { 
   insertCourseSchema, 
   insertUserCourseSchema, 
@@ -268,6 +269,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error getting code assistance:", error);
       res.status(500).json({ message: "Failed to get code assistance" });
+    }
+  });
+
+  // Update API key endpoint
+  app.post('/api/ai/update-key', isAuthenticated, async (req, res) => {
+    try {
+      const { apiKey } = req.body;
+      if (!apiKey) {
+        return res.status(400).json({ message: "API key is required" });
+      }
+      
+      qwenService.updateApiKey(apiKey);
+      res.json({ message: "API key updated successfully", configured: true });
+    } catch (error) {
+      console.error("Error updating API key:", error);
+      res.status(500).json({ message: "Failed to update API key" });
+    }
+  });
+
+  // Check AI service status
+  app.get('/api/ai/status', isAuthenticated, async (req, res) => {
+    try {
+      const configured = qwenService.isConfigured();
+      res.json({ 
+        configured, 
+        service: 'Qwen/Qwen2.5-Coder-32B-Instruct',
+        message: configured ? 'AI service is ready' : 'Please provide your Qwen API key to enable AI features'
+      });
+    } catch (error) {
+      console.error("Error checking AI status:", error);
+      res.status(500).json({ message: "Failed to check AI status" });
     }
   });
 
